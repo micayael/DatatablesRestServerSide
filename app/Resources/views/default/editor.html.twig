@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    <script>
+
+        $(document).ready(function () {
+
+            var defaultDelay = 700;
+
+            var table = $('.datatable').DataTable({
+                "ajax": "{{ path('convocantes') }}",
+                "processing": true,
+                "serverSide": true,
+                "searchDelay": defaultDelay,
+                "columns": [
+                    {"data": "codigo"},
+                    {"data": "nombre_simple"},
+                    {"data": "nombre"},
+                    {"data": "tipo"},
+                    {"data": "dependiente_de"},
+                    {"data": "nivel_entidad"},
+                    {"data": "tipo_entidad"}
+                ],
+                "order": [[0, "asc"]],
+                "language": {
+                    "url": 'http://localhost/datatable/web/datatables.es.json'
+                },
+                "sPaginationType": "extStyle"
+            });
+
+            // Agrega filtros por columna
+            $('.datatable thead td').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" size="13" placeholder="' + title + '" />');
+            });
+
+            // Ejecutar filtros por columna
+            var search_timeout = undefined;
+
+            $(".datatable thead input").on('keyup change', function () {
+                if (search_timeout != undefined) {
+                    clearTimeout(search_timeout);
+                }
+
+                var $this = this;
+
+                search_timeout = setTimeout(function () {
+                    search_timeout = undefined;
+
+                    table
+                            .column($($this).parent().index() + ':visible')
+                            .search($this.value)
+                            .draw();
+
+                }, defaultDelay);
+            });
+        });
+
+    </script>
+
+{% endblock %}
+
+{% block body %}
+
+    <div id="maincontent" class="container">
+
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-bordered datatable">
+                    <thead>
+                    <tr>
+                        <td>Código</td>
+                        <td>Nombre Simple</td>
+                        <td>Nombre</td>
+                        <td>tipo</td>
+                        <td>Dependiente de</td>
+                        <td>Nivel de Entidad</td>
+                        <td>Tipo de Entidad</td>
+
+                    </tr>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nombre Simple</th>
+                        <th>Nombre</th>
+                        <th>tipo</th>
+                        <th>Dependiente de</th>
+                        <th>Nivel de Entidad</th>
+                        <th>Tipo de Entidad</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
