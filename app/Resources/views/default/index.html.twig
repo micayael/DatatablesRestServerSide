@@ -1,64 +1,48 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    {% stylesheets 'bundles/app/css/jquery-ServerSideDataTable.css' filter='cssrewrite' output='css/compiled/main.css' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+
+{% endblock %}
+
 {% block javascripts %}
 
     {{ parent() }}
 
+    {% javascripts '@AppBundle/Resources/public/js/jquery-ServerSideDataTable.js' output='js/compiled/main.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
     <script>
 
-        $(document).ready(function () {
-            var table = $('.datatable').DataTable({
-                "ajax": "{{ path('convocantes') }}",
-                "processing": true,
-                "serverSide": true,
-                "columns": [
-                    {"data": "codigo"},
-                    {"data": "nombre_simple"},
-                    {"data": "nombre"},
-                    {"data": "tipo"},
-                    {"data": "dependiente_de"},
-                    {"data": "nivel_entidad"},
-                    {"data": "tipo_entidad"}
-                ],
-                "order": [[ 1, "asc" ]],
-                "language": {
-                    "thousands": ",",
-                    "emptyTable": "No se han encontrado datos",
-                    "info": "Se muestran del _START_ al _END_ de _TOTAL_ resultados",
-                    "infoEmpty": "Se muestran del 0 al 0 de 0 resultados",
-                    "infoFiltered": "(Filtrados de un total de _MAX_)",
-                    "infoPostFix": "",
-                    "lengthMenu": "Mostrar _MENU_ resultados",
-                    "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
-                    "search": "Buscar:",
-                    "zeroRecords": "No se han encontrado datos",
-                    "paginate": {
-                        "first": "<<",
-                        "last": ">>",
-                        "next": ">",
-                        "previous": "<"
-                    },
-                    "aria": {
-                        "sortAscending": ": activar para ordenar la columna ascendentemente",
-                        "sortDescending": ": activar para ordenar la columna descendentemente"
-                    }
-                }
-            });
+        $.ServerSideDataTable.dataTableDefaults.language.url = 'http://localhost/datatable/web/datatables.es.json';
 
-            // Filtros por columna
-            $('.datatable thead td').each(function () {
-                var title = $(this).text();
-                $(this).html('<input type="text" size="13" placeholder="' + title + '" />');
-            });
+        $.ServerSideDataTable.extraDataFormatHtml = function (data) {
+            return '<div class="row">' +
+                    '   <div class="col-md-11">' + data.nombre + '</div>' +
+                    '</div>';
+        };
 
-            // Ejecutar filtros por columna
-            $(".datatable thead input").on('keyup change', function () {
-                table
-                        .column($(this).parent().index() + ':visible')
-                        .search(this.value)
-                        .draw();
-            });
+        var table = $.ServerSideDataTable('{{ path('convocantes') }}', {
+            "columns": [
+                {"data": "codigo"},
+                {"data": "nombre_simple"},
+                {"data": "nombre"},
+                {"data": "tipo_convocante"},
+                {"data": "dependiente_de"},
+                {"data": "nivel_entidad"},
+                {"data": "tipo_entidad"}
+            ],
+            "order": [[1, "asc"]]
+        }, {
+            extraData: true,
+            extraDataActions: true,
+            rowActions: true
         });
 
     </script>
@@ -74,6 +58,7 @@
                 <table class="table table-bordered datatable">
                     <thead>
                     <tr>
+                        <td class="col-xs-1"></td>
                         <td>Código</td>
                         <td>Nombre Simple</td>
                         <td>Nombre</td>
@@ -81,9 +66,10 @@
                         <td>Dependiente de</td>
                         <td>Nivel de Entidad</td>
                         <td>Tipo de Entidad</td>
-
+                        <td class="col-xs-3"></td>
                     </tr>
                     <tr>
+                        <th></th>
                         <th>Código</th>
                         <th>Nombre Simple</th>
                         <th>Nombre</th>
@@ -91,6 +77,7 @@
                         <th>Dependiente de</th>
                         <th>Nivel de Entidad</th>
                         <th>Tipo de Entidad</th>
+                        <th></th>
                     </tr>
                     </thead>
                 </table>

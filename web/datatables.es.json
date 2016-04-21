@@ -1,23 +1,31 @@
-"language": {
-    "thousands": ",",
-        "emptyTable": "No se han encontrado datos",
-        "info": "Se muestran del _START_ al _END_ de _TOTAL_ resultados",
-        "infoEmpty": "Se muestran del 0 al 0 de 0 resultados",
-        "infoFiltered": "(Filtrados de un total de _MAX_)",
-        "infoPostFix": "",
-        "lengthMenu": "Mostrar _MENU_ resultados",
-        "loadingRecords": "Cargando...",
-        "processing": "Procesando...",
-        "search": "Buscar:",
-        "zeroRecords": "No se han encontrado datos",
-        "paginate": {
-        "first": "<<",
-            "last": ">>",
-            "next": ">",
-            "previous": "<"
-    },
-    "aria": {
-        "sortAscending": ": activar para ordenar la columna ascendentemente",
-            "sortDescending": ": activar para ordenar la columna descendentemente"
+{
+  "decimal": ",",
+  "thousands": ".",
+  "emptyTable": "No se han encontrado datos",
+  "info": "Se muestran del _START_ al _END_ de _TOTAL_ resultados",
+  "infoEmpty": "Se muestran del 0 al 0 de 0 resultados",
+  "infoFiltered": "(Filtrados de un total de _MAX_)",
+  "infoPostFix": "",
+  "lengthMenu": "Mostrar _MENU_ resultados",
+  "loadingRecords": "Cargando...",
+  "processing": "Procesando...",
+  "search": "Buscar:",
+  "zeroRecords": "No se han encontrado datos",
+  "paginate": {
+    "first": "<<",
+    "last": ">>",
+    "next": ">",
+    "previous": "<"
+  },
+  "aria": {
+    "sortAscending": ": activar para ordenar la columna ascendentemente",
+    "sortDescending": ": activar para ordenar la columna descendentemente"
+  },
+  "select": {
+    "rows": {
+      "_": "%d filas seleccionadas",
+      "0": "Presiona las filas para seleccionarlas",
+      "1": "1 filas seleccionada"
     }
+  }
 }

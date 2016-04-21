@@ -70,7 +70,23 @@ csa_guzzle:
     clients:
         api:
             config:
-                base_uri: https://backend-dev.dncp.gov.py:9000
+                base_uri: http://10.128.24.40:9002/
                 auth: [admin, Contrataciones]
     profiler: %kernel.debug%
     logger: true
+
+intriro_csv:
+    exporters:
+        default:
+            delimiter: ";"
+            enclosure: '"'
+            escape: "\\"
+            from_charset: UTF-8
+            to_charset: UTF-8
+            file_mode: w
+
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~

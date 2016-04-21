@@ -7,3 +7,13 @@ convocantes:
     path:             /convocantes.json
     defaults:         { _controller: AppBundle:Default:convocantes }
     methods:          [GET]
+
+editor_list:
+    path:             /editor
+    defaults:         { _controller: AppBundle:Default:editor }
+    methods:          [GET]
+
+editor_edit:
+    path:             /editor/editar
+    defaults:         { _controller: AppBundle:Default:editar }
+    methods:          [GET,PUT]

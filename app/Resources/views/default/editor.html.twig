@@ -1,4 +1,32 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseEditDatatable.html.twig' %}
+
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    <style>
+        div.DTE_Inline input {
+            border: none;
+            background-color: transparent;
+            padding: 0 !important;
+            font-size: 90%;
+        }
+
+        div.DTE_Inline input:focus {
+            outline: none;
+            background-color: transparent;
+
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            border: none;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            background-color: lightcoral;
+        }
+    </style>
+
+{% endblock %}
+
 
 {% block javascripts %}
 
@@ -6,15 +34,78 @@
 
     <script>
 
+        var tableId = '#convocantes';
+
+        var editor; // use a global for the submit and return data rendering in the examples
+        var table;
+
         $(document).ready(function () {
+
+            editor = new $.fn.dataTable.Editor({
+                table: tableId,
+                ajax: {
+                    create: {
+                        type: 'POST',
+                        url: '../php/rest/create.php'
+                    },
+                    edit: {
+                        type: 'PUT',
+                        url: '{{ path('editor_edit') }}?id=_id_'
+                    },
+                    remove: {
+                        type: 'DELETE',
+                        url: '../php/rest/remove.php?id=_id_'
+                    }
+                },
+                fields: [{
+                    label: "codigo:",
+                    name: "codigo"
+                }, {
+                    label: "nombre_simple:",
+                    name: "nombre_simple"
+                }, {
+                    label: "nombre:",
+                    name: "nombre"
+                }, {
+                    label: "tipo:",
+                    name: "tipo"
+                }, {
+                    label: "dependiente_de:",
+                    name: "dependiente_de"
+                }, {
+                    label: "nivel_entidad:",
+                    name: "nivel_entidad"
+                }, {
+                    label: "tipo_entidad:",
+                    name: "tipo_entidad"
+                }
+                ]
+            });
+
+            // Activate an inline edit on click of a table cell
+            $(tableId).on('click', 'tbody td', function (e) {
+                editor.inline(this);
+            });
+
+            editor.on('open', function(){
+                table.keys.disable();
+                console.log('editando...');
+            });
+
+            editor.on('close', function(){
+                table.keys.enable();
+                console.log('no editando...');
+            });
+
 
             var defaultDelay = 700;
 
-            var table = $('.datatable').DataTable({
+            table = $(tableId).DataTable({
                 "ajax": "{{ path('convocantes') }}",
                 "processing": true,
                 "serverSide": true,
                 "searchDelay": defaultDelay,
+                "pagingType": "full_numbers",
                 "columns": [
                     {"data": "codigo"},
                     {"data": "nombre_simple"},
@@ -24,15 +115,27 @@
                     {"data": "nivel_entidad"},
                     {"data": "tipo_entidad"}
                 ],
-                "order": [[0, "asc"]],
+                "order": [[1, "asc"]],
                 "language": {
                     "url": 'http://localhost/datatable/web/datatables.es.json'
                 },
-                "sPaginationType": "extStyle"
+//                buttons: [
+//                    {extend: 'create', editor: editor},
+//                    {extend: 'edit', editor: editor},
+//                    {extend: 'remove', editor: editor}
+//                ],
+//                select: {
+//                    style: 'os',
+//                    selector: 'td:first-child',
+//                    blurable: true
+//                },
+                keys: {
+                    editor: editor
+                }
             });
 
             // Agrega filtros por columna
-            $('.datatable thead td').each(function () {
+            $(tableId + ' thead td').each(function () {
                 var title = $(this).text();
                 $(this).html('<input type="text" size="13" placeholder="' + title + '" />');
             });
@@ -40,7 +143,7 @@
             // Ejecutar filtros por columna
             var search_timeout = undefined;
 
-            $(".datatable thead input").on('keyup change', function () {
+            $(tableId + " thead input").on('keyup change', function () {
                 if (search_timeout != undefined) {
                     clearTimeout(search_timeout);
                 }
@@ -69,7 +172,7 @@
 
         <div class="row">
             <div class="table-responsive">
-                <table class="table table-bordered datatable">
+                <table id="convocantes" class="table table-bordered datatable">
                     <thead>
                     <tr>
                         <td>Código</td>

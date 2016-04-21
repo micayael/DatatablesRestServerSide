@@ -1,0 +1,24 @@
+td.details-control {
+    background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+
+tr.details td.details-control {
+    background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
+}
+
+input:not(:empty) {
+    background-color: red;
+}
+
+input.filter-applied {
+    background-color: yellow;
+}
+
+.datatable a.extra-data-actions:after{
+    content: " | ";
+}
+
+.datatable a.extra-data-actions:last-child:after{
+    content: "";
+}
